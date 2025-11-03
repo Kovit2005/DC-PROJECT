@@ -141,5 +141,16 @@ VS Code integration
 
 Security note: avoid committing secrets (passwords, tokens). Use `.env` or other secrets mechanisms and add them to `.gitignore`.
 
+CI / GitHub Actions
+-------------------
+
+A basic CI workflow was added at `.github/workflows/ci.yml`. It will run on push and pull requests to `main` and will:
+
+- Start a PostgreSQL service for tests.
+- Build the backend modules with Maven (packaging the JARs).
+- Install and build the frontend (Vite production build).
+
+After you push changes to `main`, check the Actions tab on GitHub to see workflow runs and logs.
+
 ```
 --------------------
