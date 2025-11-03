@@ -37,15 +37,6 @@ Run locally (without Docker)
      mvn -pl backend -am package -DskipTests
      java -jar backend/booking-service/target/booking-service-0.0.1-SNAPSHOT.jar
      java -jar backend/gateway-service/target/gateway-service-0.0.1-SNAPSHOT.jar
-
-4. Start frontend:
-
-   cd frontend
-   npm install
-   npm run dev
-
-Run with docker-compose
-1. Copy `.env.sample` to `.env` and edit values if needed.
 ```markdown
 # Smart Railway Distributed System
 
@@ -151,3 +142,4 @@ VS Code integration
 Security note: avoid committing secrets (passwords, tokens). Use `.env` or other secrets mechanisms and add them to `.gitignore`.
 
 ```
+--------------------
