@@ -1,0 +1,25 @@
+{
+  "name": "smart-railway-frontend",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-dom": "*",
+  "react-router-dom": "*",
+    "axios": "*",
+    "chart.js": "*",
+    "react-chartjs-2": "*"
+  },
+  "devDependencies": {
+    "vite": "*",
+    "@vitejs/plugin-react": "*",
+    "tailwindcss": "*",
+    "@tailwindcss/postcss": "*",
+    "postcss": "*",
+    "autoprefixer": "*"
+  }
+}

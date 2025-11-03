@@ -1,0 +1,91 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-postgres}
+      POSTGRES_DB: smartrail
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+
+  zookeeper:
+    image: bitnami/zookeeper:3
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+
+  booking-service:
+    build: ./backend/booking-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/smartrail
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}
+    depends_on:
+      - db
+    ports:
+      - "8081:8081"
+
+  analytics-service:
+    build: ./backend/analytics-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/smartrail
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "8082:8082"
+
+  gateway-service:
+    build: ./backend/gateway-service
+    environment:
+      - BOOKING_SERVICE_URL=http://booking-service:8081
+      - ANALYTICS_SERVICE_URL=http://analytics-service:8082
+    ports:
+      - "8080:8080"
+    depends_on:
+      - booking-service
+      - analytics-service
+
+  node-manager:
+    build: ./backend/node-manager
+    # node-manager runs background tasks and doesn't need a host port by default
+
+  clock-service:
+    build: ./backend/clock-service
+    # clock-service runs background tasks and doesn't need a host port by default
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  db-data:
+  grafana-data:

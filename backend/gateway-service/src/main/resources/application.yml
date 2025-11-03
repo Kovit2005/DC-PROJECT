@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+services:
+  booking: ${BOOKING_SERVICE_URL:http://localhost:8081}
+  analytics: ${ANALYTICS_SERVICE_URL:http://localhost:8082}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true

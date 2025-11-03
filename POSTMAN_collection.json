@@ -1,0 +1,12 @@
+{
+  "info": {
+    "name": "Smart Railway APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    { "name": "List Trains", "request": { "method": "GET", "url": "http://localhost:8080/api/trains" } },
+    { "name": "Book", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "http://localhost:8080/api/book", "body": {"mode":"raw","raw":"{ \"userId\":1, \"trainId\":1, \"seats\":2 }"} } },
+    { "name": "Get Bookings", "request": { "method": "GET", "url": "http://localhost:8080/api/bookings/1" } },
+    { "name": "Analytics Summary", "request": { "method": "GET", "url": "http://localhost:8080/api/analytics/summary" } }
+  ]
+}
